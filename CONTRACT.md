@@ -61,7 +61,7 @@ no `main` page and no `sidebar.panellist` entry.
 
 | Slot / service | Key | What it renders |
 |---|---|---|
-| `settings.section` | `google-drive` | The connected accounts, each with a Remove button behind a confirmation dialog, an Add account button that opens the onboarding wizard, a refresh button, and the storage/bridge information the host reports. |
+| `settings.section` | `google-drive` | The connected accounts, each with a Test button and a Remove button behind a confirmation dialog, an Add account button that opens the onboarding wizard, a refresh button, a toggle that turns the right-sidebar Drive tab on or off, and the storage/bridge information the host reports. |
 | `sidebar.right.pane.tab` | `@boldandigital/dsh-google-drive/drive` | The tab body: an account picker, a folder breadcrumb with a back button, and the folder's files. |
 | `sidebar.right.pane.tab.title` | `@boldandigital/dsh-google-drive/drive` | The tab's chip title. |
 | `sidebarRight` (tab registry) | `@boldandigital/dsh-google-drive/drive`, kind `drive` | The tab itself, next to Workspace files, Browser and Terminal, with its guide capsule on the Start screen. |
@@ -157,9 +157,12 @@ Payload `{}`.
 ```
 
 A `foreign` account belongs to the `google-workspace-mcp` server rather than to
-this plugin. It is listed in the settings section and can be browsed with, but
-it cannot be removed there: its key file may be shared with another account,
-and the server that owns it may still be using it.
+this plugin. It is listed in the settings section and can be browsed with.
+Removing it does not delete its credentials — its key file may be shared with
+another account, and the server that owns it may still be using it — so the
+removal *unlinks* it: the plugin stops offering the account and the server
+keeps its copy. The names of the unlinked accounts live in
+`<storeDir>/dsh-google-drive/hidden.json`.
 
 ### `onboarding/detect`
 
@@ -264,11 +267,39 @@ to impersonate, for domain-wide delegation.
 
 Returns `{ account }`. Failure: `error.code === 'invalid-key'`.
 
+### `accounts/test`
+
+Payload `{ name }` → `{ account: { name, email, type, subject }, files: number }`.
+
+Asks Drive the cheapest question it answers: can this account see its own
+root? A token that expired, a key file that moved and an account whose access
+was revoked each fail here, with their own message.
+
+### `settings/get`
+
+Payload `{}` → `{ sidebarTab: boolean }`.
+
+The plugin's own preferences. They live in
+`<storeDir>/dsh-google-drive/preferences.json`, so they travel with the
+plugin rather than with the harness's configuration.
+
+### `settings/set`
+
+Payload `{ sidebarTab?: boolean }` → `{ sidebarTab: boolean }`.
+
+Writes the plugin's own preferences. `sidebarTab` decides whether the
+right-sidebar Drive tab is registered at all.
+
 ### `accounts/remove`
 
-Payload `{ name }` → `{ removed: true }`.
+Payload `{ name }` → `{ removed: true, unlinked?: true, warnings?: string[] }`.
 
-The host never deletes a key file another account still points at.
+An account this plugin owns is removed with its credentials. The host never
+deletes a key file another account still points at.
+
+An account the `google-workspace-mcp` server owns is unlinked instead: the
+result carries `unlinked: true` and a warning saying that the server keeps
+its credentials, and the account is no longer listed.
 
 ### `drive/list`
 

@@ -15,8 +15,9 @@ accounts and files of whoever looks at it.
 
 | | |
 |---|---|
-| **Settings section** | Settings → Google Drive lists the connected accounts, each with a Remove button behind a confirmation, plus an Add account button, a refresh button and the storage/bridge information. |
+| **Settings section** | Settings → Google Drive lists the connected accounts, each with a **Test** button that checks the connection and a **Remove** button behind a confirmation, plus an Add account button, a refresh button and the storage/bridge information. |
 | **Guided onboarding** | Add account opens a wizard: sign in with Google through a Desktop app OAuth client, or connect a service account with a key file. |
+| **Optional browser** | A toggle in the settings section turns the Drive tab in the right sidebar on or off. The choice is remembered, and the tab is gone the next time the app starts. |
 | **Right-sidebar tab** | The Drive tab shows an account picker, a folder breadcrumb with a back button, and the folder's files. Each row carries a badge naming the kind: Google Sheet, Google Doc, Google Slides, Google Drawing, Google Form, Google Script, Folder, Shortcut, or the file's own extension (PDF, XLSX, …) for an ordinary file. |
 | **Hand a file to the agent** | Drag a row into the conversation, or press **Add to chat** on it. The file arrives as a reference the agent can act on. |
 | **`@` reference menu** | Typing `@` in the composer opens the harness reference menu, which also lists Google Drive files. |
@@ -147,7 +148,13 @@ standard library.
 - The account picked in the Drive tab is client-side state and resets to the
   first account when the app is reloaded.
 - An account that belongs to the `google-workspace-mcp` server is listed in
-  the settings section but cannot be removed there.
+  the settings section. Its credentials belong to that server, so removing
+  it here only unlinks it: the plugin stops offering the account and the
+  server keeps its own copy. Remove it in the MCP server's own settings to
+  delete the credentials.
+- Turning the Drive tab off removes the plugin's view of it. A tab that was
+  already open then shows the harness's empty-tab placeholder until it is
+  closed; a new session never opens it at all.
 
 ## Licence
 
