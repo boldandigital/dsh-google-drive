@@ -1,21 +1,25 @@
 # dsh-google-drive
 
-Add Google Drive accounts to the DeepSeek Harness from the sidebar.
+Connect Google Drive to the DeepSeek Harness.
 
-The plugin opens a **Google Drive** tab in the left sidebar. From there you can
-sign in to Google with OAuth, or paste a service-account key, and then browse
-that account's Drive files. The agent gets the same accounts as tools.
+The plugin has no entry in the left sidebar. Connected accounts live in
+**Settings → Google Drive**, and the files live in the **Drive** tab of the
+right sidebar, next to Workspace files, Browser and Terminal. A file can be
+dragged into the conversation, so the agent works with the same Drive the user
+does.
 
-![The Google Drive panel in the DSH sidebar](docs/screenshot.png)
+No screenshot of the plugin's UI is published: it would show the private
+accounts and files of whoever looks at it.
 
 ## What it does
 
 | | |
 |---|---|
-| **Sidebar tab** | A Google Drive entry in the left rail opens a panel in the central column. |
-| **OAuth accounts** | Paste a Google OAuth client id and secret, follow the consent URL, and the account is stored. |
-| **Service accounts** | Paste a service-account key JSON. Optionally name a Workspace user to impersonate (domain-wide delegation). |
-| **Drive browser** | Browse folders, search by name, inspect a file, and download it — with Google-native documents exported to PDF, DOCX, XLSX and friends. |
+| **Settings section** | Settings → Google Drive lists the connected accounts, each with a Remove button behind a confirmation, plus an Add account button, a refresh button and the storage/bridge information. |
+| **Guided onboarding** | Add account opens a wizard: sign in with Google through a Desktop app OAuth client, or connect a service account with a key file. |
+| **Right-sidebar tab** | The Drive tab shows an account picker, a folder breadcrumb with a back button, and the folder's files. Each row carries a badge naming the kind: Google Sheet, Google Doc, Google Slides, Google Drawing, Google Form, Google Script, Folder, Shortcut, or the file's own extension (PDF, XLSX, …) for an ordinary file. |
+| **Hand a file to the agent** | Drag a row into the conversation, or press **Add to chat** on it. The file arrives as a reference the agent can act on. |
+| **`@` reference menu** | Typing `@` in the composer opens the harness reference menu, which also lists Google Drive files. |
 | **Agent tools** | The same account list and file operations are exposed to the agent as `google_drive_*` tools. |
 | **MCP bridge** | Accounts are mirrored into `~/.google-mcp/accounts.json`, so an installed `google-workspace-mcp` server picks a new account up on its next call — no restart. |
 
@@ -46,7 +50,7 @@ The bundle ships with sensible defaults. To change them, override the
 | Key | Default | Meaning |
 |---|---|---|
 | `scopes` | `['https://www.googleapis.com/auth/drive']` | OAuth scopes requested at sign-in. |
-| `defaultAccount` | `''` | Account selected when the panel opens. Empty means the first one. |
+| `defaultAccount` | `''` | Account selected when the Drive tab opens. Empty means the first one. |
 | `mcpBridge` | `true` | Mirror the registry into `~/.google-mcp` for `google-workspace-mcp`. |
 | `storeDir` | `''` | Registry and credential directory. Empty means `~/.google-mcp`. |
 
@@ -76,7 +80,8 @@ For a service account:
 
 1. In Google Cloud Console, create a service account and download its key.
 2. Share the Drive folder you need with the account's `client_email`.
-3. Paste the key JSON into the panel.
+3. Paste the key JSON into the wizard. With the gcloud command line tool
+   installed and signed in, the wizard can create the key for you instead.
 
 **Domain-wide delegation** (the optional "impersonate" field) lets the service
 account act as a Workspace user with that user's full Drive access. A Workspace
@@ -84,9 +89,24 @@ super-admin must first authorise the service account's client id under
 *Admin console → Security → Domain-wide delegation*.
 
 **Use OAuth** when you need the files a specific person can see but has not
-shared with anyone. Create an *Desktop app* OAuth client in Google Cloud
-Console, and paste its client id and secret into the panel. The panel opens a
-loopback consent URL; the sign-in must complete on the same machine.
+shared with anyone. The plugin signs in through a loopback consent URL on
+`http://localhost`, so it needs a **Desktop app** OAuth client — Google
+rejects a localhost callback for a web client. The wizard walks through
+creating one in Google Cloud Console and reads the downloaded JSON file in the
+browser, so the client id and secret do not have to be typed. The sign-in must
+complete on the same machine.
+
+## Handing a file to the agent
+
+Drag a row from the Drive tab into the conversation, or press **Add to chat**
+on it. The composer keeps the file as a reference chip.
+
+When the message is sent, the plugin names the account, the file id and the
+file in the prompt, so the agent knows which Drive file is meant and which
+tool reads it: `google_drive_download_file` for a file,
+`google_drive_list_files` for a folder, and `google_drive_search_files` for
+other files in the same account. The file names are marked as untrusted user
+data.
 
 ## Agent tools
 
@@ -96,7 +116,7 @@ loopback consent URL; the sign-in must complete on the same machine.
 | `google_drive_list_files` | `account`, `folderId?`, `pageSize?` |
 | `google_drive_search_files` | `account`, `query`, `pageSize?` |
 | `google_drive_download_file` | `account`, `fileId`, `path`, `exportFormat?` |
-| `google_drive_upload_file` | `account`, `localPath`, `name?`, `folderId?` |
+| `google_drive_upload_file` | `account`, `localPath`, `name?`, `folderId?`, `mimeType?` |
 
 Adding, replacing and removing an account stays **user-only**. Those actions
 grant authority, so the agent cannot perform them.
@@ -106,6 +126,8 @@ grant authority, so the agent cannot perform them.
 ```sh
 node --check lib/index.js
 node --check lib/client.js
+node --check lib/client.onboarding.js
+node --check lib/client.sidebar.js
 ```
 
 The bundle has no build step and no runtime dependencies beyond Node's
@@ -120,10 +142,12 @@ standard library.
   and its `listFolderContents` reports an empty folder for an account whose
   files are plainly visible. This plugin lists the root of a service account
   with the negated query and keeps the genuinely top-level items.
-- `nextPageToken` is not surfaced in the panel, so the file list shows the
+- `nextPageToken` is not surfaced in the Drive tab, so the file list shows the
   first page only.
-- The active account is client-side state and resets to the first account when
-  the page is reloaded.
+- The account picked in the Drive tab is client-side state and resets to the
+  first account when the app is reloaded.
+- An account that belongs to the `google-workspace-mcp` server is listed in
+  the settings section but cannot be removed there.
 
 ## Licence
 
