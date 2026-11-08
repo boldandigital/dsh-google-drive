@@ -8,8 +8,15 @@ right sidebar, next to Workspace files, Browser and Terminal. A file can be
 dragged into the conversation, so the agent works with the same Drive the user
 does.
 
-No screenshot of the plugin's UI is published: it would show the private
-accounts and files of whoever looks at it.
+## Screenshots
+
+The account names, the addresses and the file names in these screenshots are
+invented. The real ones belong to whoever installed the plugin, so they stay
+out of the repository.
+
+![Settings → Google Drive: the connected accounts, each with a Test and a Remove button, and a toggle for the Drive tab in the right sidebar](docs/screenshots/settings.png)
+
+![The Drive tab in the right sidebar: the files of an account, each with the kind of file it is](docs/screenshots/drive-tab.png)
 
 ## What it does
 
