@@ -95,6 +95,7 @@ one-click path instead of asking the user to type what is already installed.
   "gcloud": {
     "available": true,                       // a gcloud binary was found
     "path": "/Users/lars/google-cloud-sdk/bin/gcloud",
+    "version": "592.0.0",                   // the SDK version, or null
     "authenticated": true,                   // it has an active credential
     "account": "lars.z@icloud.com",         // the active account, or null
     "projects": [                            // the projects it can reach
@@ -123,6 +124,13 @@ Every field degrades on its own: a missing `gcloud` yields
 `"available": false`, and an unreadable directory yields an empty list. The
 endpoint never fails because a probe failed — a probe that throws is reported
 as "not available", never as an error.
+
+The client secret of a discovered OAuth client is never reported here — only
+what a chooser needs. The secret stays on disk.
+
+`type` matters: this plugin signs in through a loopback callback
+(`http://localhost:<port>`), and Google accepts that only for an `installed`
+(Desktop app) client. A `web` client cannot be used here.
 
 ### `onboarding/create-service-key`
 
