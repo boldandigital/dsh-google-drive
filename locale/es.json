@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Cuentas de Google Drive",
+    "description": "Añade una pestaña de Google Drive a la barra lateral donde puedes iniciar sesión con OAuth o pegar una clave de cuenta de servicio y luego explorar los archivos de la cuenta."
+  }
+}

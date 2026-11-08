@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Google Drive-accounts",
+    "description": "Voegt een Google Drive-tab aan de zijbalk toe waarin je inlogt met OAuth of een serviceaccountsleutel plakt, en daarna de bestanden van het account doorbladert."
+  }
+}

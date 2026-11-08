@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax check
+        run: |
+          for file in lib/index.js lib/client.js lib/host/*.js; do
+            node --check "$file"
+          done
+
+      - name: Manifest check
+        run: node -e "
+          const pkg = require('./package.json');
+          if (!pkg.dsh?.bundle?.patch) throw new Error('missing dsh.bundle.patch');
+          if (!pkg.dsh?.client?.platform) throw new Error('missing dsh.client.platform');
+          if (!pkg.exports['./client']) throw new Error('missing ./client export');
+          for (const locale of ['en', 'zh', 'de', 'fr', 'es', 'pt', 'ru', 'ja', 'nl']) {
+            const data = require('./locale/' + locale + '.json');
+            if (!data.meta?.title || !data.meta?.description) {
+              throw new Error('locale/' + locale + '.json is missing meta.title or meta.description');
+            }
+          }
+        "
+
+      - name: Icon check
+        run: node -e "
+          const fs = require('node:fs');
+          const svg = fs.readFileSync('assets/icon.svg', 'utf8');
+          if (!svg.includes('<svg')) throw new Error('the icon is not an SVG');
+          if (svg.length > 256 * 1024) throw new Error('the icon exceeds 256 KiB');
+        "

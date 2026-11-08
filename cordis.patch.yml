@@ -1,0 +1,29 @@
+# dsh-google-drive bundle patch: mounts the Google Drive account panel into a
+# dsh profile.
+#
+# The host half keeps every secret in the DSH credential store; nothing below
+# holds a key. The panel appears in the sidebar as a "Google Drive" tab and
+# opens in the central panel.
+#
+# Install into the active profile with:
+#   dsh plugin --profile desktop add "link:/path/to/dsh-google-drive"
+
+- insert:
+    - id: google-drive
+      name: 'dsh-google-drive'
+      config:
+        # OAuth scopes requested when the user signs in with their own Google
+        # account. The Drive scope is RESTRICTED: Google requires an app
+        # verification for it, but the service-account path needs no consent
+        # screen at all, which is the workaround.
+        scopes:
+          - 'https://www.googleapis.com/auth/drive'
+        # Account selected when the panel opens. Empty means the first account
+        # in the list.
+        defaultAccount: ''
+        # Mirror the account registry into ~/.google-mcp so an installed
+        # google-workspace-mcp server picks a new account up on its next call.
+        mcpBridge: true
+        # Where the account registry and credential files live.
+        # Empty means ~/.google-mcp.
+        storeDir: ''

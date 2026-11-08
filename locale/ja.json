@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Google Drive アカウント",
+    "description": "サイドバーに Google Drive タブを追加します。OAuth でサインインするかサービスアカウント鍵を貼り付けて、そのアカウントのファイルを閲覧できます。"
+  }
+}

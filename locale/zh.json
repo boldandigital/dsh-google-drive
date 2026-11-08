@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Google Drive 账号",
+    "description": "在侧边栏添加一个 Google Drive 标签页：可用 OAuth 登录或粘贴服务账号密钥，然后浏览该账号的文件。"
+  }
+}
