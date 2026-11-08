@@ -28,7 +28,8 @@
     "assets/icon.svg",
     "cordis.patch.yml",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "docs/screenshot.png"
   ],
   "dsh": {
     "bundle": {

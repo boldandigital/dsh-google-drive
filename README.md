@@ -6,7 +6,7 @@ The plugin opens a **Google Drive** tab in the left sidebar. From there you can
 sign in to Google with OAuth, or paste a service-account key, and then browse
 that account's Drive files. The agent gets the same accounts as tools.
 
-<!-- The screenshot lands in docs/ once the panel is running. -->
+![The Google Drive panel in the DSH sidebar](docs/screenshot.png)
 
 ## What it does
 
@@ -110,6 +110,20 @@ node --check lib/client.js
 
 The bundle has no build step and no runtime dependencies beyond Node's
 standard library.
+
+## Notes
+
+- A service account sees the items shared with it at the top of its Drive, and
+  Drive reports those items with **no parent at all**. The usual
+  `'root' in parents` filter therefore matches nothing and the account looks
+  empty — the upstream `google-workspace-mcp` server has this blind spot too,
+  and its `listFolderContents` reports an empty folder for an account whose
+  files are plainly visible. This plugin lists the root of a service account
+  with the negated query and keeps the genuinely top-level items.
+- `nextPageToken` is not surfaced in the panel, so the file list shows the
+  first page only.
+- The active account is client-side state and resets to the first account when
+  the page is reloaded.
 
 ## Licence
 
