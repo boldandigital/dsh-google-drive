@@ -1,7 +1,7 @@
 {
   "name": "dsh-google-drive",
   "version": "0.1.0",
-  "description": "Add Google Drive accounts to the DeepSeek Harness from the sidebar: sign in with OAuth, or paste a service-account key, then browse the account's Drive files.",
+  "description": "Connect Google Drive accounts in the DeepSeek Harness Settings, then browse the account's files in the right sidebar and drag a file straight into the conversation.",
   "keywords": [
     "dsh",
     "dsh-plugin",
