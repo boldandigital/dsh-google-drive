@@ -83,6 +83,70 @@ this plugin. It is listed and can be browsed with, but it cannot be removed
 here: its key file may be shared with another account, and the server that owns
 it may still be using it.
 
+### `onboarding/detect`
+
+Payload `{}`.
+
+Reports what this machine can already supply, so the panel can offer a
+one-click path instead of asking the user to type what is already installed.
+
+```jsonc
+{
+  "gcloud": {
+    "available": true,                       // a gcloud binary was found
+    "path": "/Users/lars/google-cloud-sdk/bin/gcloud",
+    "authenticated": true,                   // it has an active credential
+    "account": "lars.z@icloud.com",         // the active account, or null
+    "projects": [                            // the projects it can reach
+      { "id": "charged-garden-280823", "name": "Google Sheet Integration" }
+    ]
+  },
+  "oauthClients": [                          // OAuth clients found on disk
+    {
+      "path": "/Users/lars/Downloads/client_secret_123.apps.googleusercontent.com.json",
+      "clientId": "123.apps.googleusercontent.com",
+      "projectName": "Untitled project",     // may be null
+      "type": "web"                          // "web" | "installed"
+    }
+  ],
+  "serviceAccounts": [                      // service accounts gcloud can create a key for
+    {
+      "email": "gpl-love-mcp@charged-garden-280823.iam.gserviceaccount.com",
+      "projectId": "charged-garden-280823",
+      "displayName": "GPL Love MCP"
+    }
+  ]
+}
+```
+
+Every field degrades on its own: a missing `gcloud` yields
+`"available": false`, and an unreadable directory yields an empty list. The
+endpoint never fails because a probe failed — a probe that throws is reported
+as "not available", never as an error.
+
+### `onboarding/create-service-key`
+
+Payload `{ projectId, serviceAccountEmail }`.
+
+Creates a new JSON key for an existing service account and returns the key
+fields. The account must already exist; this endpoint mints a key for it.
+
+```jsonc
+{
+  "key": {
+    "type": "service_account",
+    "project_id": "charged-garden-280823",
+    "private_key_id": "…",
+    "private_key": "-----BEGIN PRIVATE KEY-----\n…",
+    "client_email": "gpl-love-mcp@charged-garden-280823.iam.gserviceaccount.com",
+    "client_id": "…"
+  }
+}
+```
+
+The key is written by the caller through `accounts/add-service`; it never
+travels to the browser twice.
+
 ### `oauth/start`
 
 Payload `{ name, clientId, clientSecret, scopes? }`.
