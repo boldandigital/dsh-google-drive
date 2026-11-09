@@ -36,7 +36,7 @@ out of the repository.
 From the Plugin Manager's **Discover** tab, or directly from npm:
 
 ```sh
-dsh plugin add dsh-google-drive
+dsh plugin --profile web add dsh-google-drive
 ```
 
 The package is also on npm as [`dsh-google-drive`](https://www.npmjs.com/package/dsh-google-drive),
@@ -45,6 +45,19 @@ so `npm install dsh-google-drive` works too. To run it straight from a checkout 
 ```sh
 dsh plugin --profile desktop add "link:/path/to/dsh-google-drive"
 ```
+
+## Compatibility and trust
+
+| | |
+|---|---|
+| **DSH version** | `>=0.2.0` (`engines.dsh` in `package.json`). Node `>=22`. |
+| **Platforms** | macOS, Linux and Windows. The OAuth flow signs in through a loopback URL on `http://localhost`, so the browser and the harness run on the same machine. |
+| **Licence** | MIT. |
+| **External service** | The Google Drive API, and Google Cloud Console only when you choose to create a service-account key there yourself. |
+| **Permissions** | The plugin reads and writes the Drive of the accounts you connect, and downloads a file only when you ask for it. It never reads a file outside the connected account. |
+| **Data** | Account names, file ids and file names are sent to the model when you hand a file to the agent, marked as untrusted data. Nothing else leaves the machine. |
+| **Credentials** | Stays in the DSH credential store and the plugin's own `0600` key files. Secrets never reach the bundle patch, the profile file, a log or a prompt. |
+| **Accounts** | Adding, replacing and removing an account is user-only; the agent cannot do it. |
 
 ## Configure
 

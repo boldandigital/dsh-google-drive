@@ -12,7 +12,18 @@
     "service-account"
   ],
   "license": "MIT",
-  "author": "boldandigital",
+  "author": {
+    "name": "boldandigital",
+    "url": "https://github.com/boldandigital"
+  },
+  "homepage": "https://github.com/boldandigital/dsh-google-drive#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boldandigital/dsh-google-drive.git"
+  },
+  "bugs": {
+    "url": "https://github.com/boldandigital/dsh-google-drive/issues"
+  },
   "type": "module",
   "main": "lib/index.js",
   "exports": {
