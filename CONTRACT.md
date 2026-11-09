@@ -144,7 +144,9 @@ Payload `{}`.
       "addedAt": "2026-11-08T13:28:50.643Z",
       "scopes": ["https://www.googleapis.com/auth/drive"],
       "status": "ready",               // "ready" | "error" | "unknown"
-      "foreign": false                 // true when the upstream MCP server owns it
+      "foreign": false,                // true when the upstream MCP server owns it
+      "impersonating": false,          // true when the service account acts as a Workspace user
+      "error": null                    // why the credentials do not work, when they do not
     }
   ],
   "mcpBridge": {
@@ -155,6 +157,16 @@ Payload `{}`.
   "storage": "credentials"             // "credentials" | "files"
 }
 ```
+
+The `status` of an account is the answer to one question: **does it sign in?**
+A key file that parses is not a working account — a service account that
+impersonates a Workspace user is refused unless an administrator authorized it
+for domain-wide delegation. So the status is a real probe of the credentials,
+remembered for a minute, and `error` carries the reason when it fails.
+
+An `impersonating` account acts as a Workspace user and therefore has a real
+Drive root of its own, rather than a pile of items shared with a service
+account.
 
 A `foreign` account belongs to the `google-workspace-mcp` server rather than to
 this plugin. It is listed in the settings section and can be browsed with.
