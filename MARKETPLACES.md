@@ -77,5 +77,28 @@ conventions), which is a different thing from listing a third-party plugin.
 
 | What | Who | How |
 |---|---|---|
-| The npm package owner line | the npm account holder | The organisation **boldandigital** exists. Two steps are left, and the registry insists on the first one: a change of owners is a governance action, and the registry refuses it both to a plain session token ("turn two-factor authentication on") and to a bypass-2FA token ("governance actions are out of my reach"). So the account needs 2FA:<br>`npm --userconfig ~/.npmrc.session profile enable-2fa auth-and-writes`<br>That asks for the npm password and shows a QR code to scan with an authenticator app. Then `./scripts/npm-owner-to-org.sh` invites the organisation, waits for the acceptance and gives the package up, asking for the one-time password twice.<br>With 2FA on, publishing works with `--otp` as well, so the bypass-2FA token is no longer needed — and it stops being allowed to publish in January 2027 anyway. |
 | The `hostsalt` account | a hostsalt.com super-admin | Authorise client id `118164111347282287563` for `https://www.googleapis.com/auth/drive` under **Admin console → Security → API access → Domain-wide delegation**. Until then the account refuses its token, and the plugin says exactly what is missing. |
+| The npm package owner line (optional) | the npm account holder | The organisation **boldandigital** exists, but npm only lets a *change of owners* happen with real two-factor authentication, and npm no longer accepts a new TOTP method — only a security key. The account has neither, so the handover needs: *Add a 2FA method* → security key (a Mac's Touch ID counts) at <https://www.npmjs.com/settings/larsvonhierblau/tfa>, then the owner change in the browser at the package's **Admin** tab. **It is optional.** The package works, the index lists it, and the author field already says `boldandigital`; only npm's *maintainer* line is still the personal account. |
+
+## Releasing a new version
+
+The version in `package.json` is what npm publishes, and a release is a tag:
+
+```sh
+npm version patch     # 0.1.2 -> 0.1.3
+git tag v0.1.3 && git push origin main --tags
+```
+
+The workflow in `.github/workflows/publish.yml` publishes the tagged version.
+Until the trusted publisher below is configured it publishes with the granular
+token in `~/.npmrc`; from January 2027 npm stops letting bypass-2FA tokens
+publish, so configure the trusted publisher before then:
+
+```sh
+npm trust github dsh-google-drive --file publish.yml \
+  --repo boldandigital/dsh-google-drive --allow-publish
+```
+
+That is the same command the registry refuses without 2FA, because it is an
+account change; with a security key registered it goes through.
+
