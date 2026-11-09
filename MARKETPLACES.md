@@ -77,5 +77,5 @@ conventions), which is a different thing from listing a third-party plugin.
 
 | What | Who | How |
 |---|---|---|
-| The npm package owner line | the npm account holder | Create the npm organisation **boldandigital** at <https://www.npmjs.com/org/create>, then transfer `dsh-google-drive` to it. The registry refuses to create an organisation through its API, so this one click is unavoidable. |
+| The npm package owner line | the npm account holder | Create the npm organisation **boldandigital** at <https://www.npmjs.com/org/create>, then run `./scripts/npm-owner-to-org.sh` from the workspace: it invites the organisation, waits for the acceptance, and gives the package up. The registry refuses to create an organisation through its API, so this one click is unavoidable. |
 | The `hostsalt` account | a hostsalt.com super-admin | Authorise client id `118164111347282287563` for `https://www.googleapis.com/auth/drive` under **Admin console → Security → API access → Domain-wide delegation**. Until then the account refuses its token, and the plugin says exactly what is missing. |
