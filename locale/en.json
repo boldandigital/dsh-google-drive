@@ -1,6 +1,7 @@
 {
   "meta": {
     "title": "Google Drive accounts",
-    "description": "Adds a Google Drive tab to the sidebar. A guided wizard sets you up: sign in with Google or connect a service account, reusing the OAuth clients and keys this Mac already has. Then browse the account's files."
+    "description": "Adds a Google Drive tab to the sidebar. A guided wizard sets you up: sign in with Google or connect a service account, reusing the OAuth clients and keys this Mac already has. Then browse the account's files.",
+    "detail": "docs/DETAIL.md"
   }
 }

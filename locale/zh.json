@@ -1,6 +1,7 @@
 {
   "meta": {
     "title": "Google Drive 账号",
-    "description": "在侧边栏添加一个 Google Drive 标签页。引导式向导会一步步帮你设置：使用 Google 登录，或连接服务账号，并可直接复用本机已有的 OAuth 客户端与密钥。之后即可浏览该账号的文件。"
+    "description": "在侧边栏添加一个 Google Drive 标签页。引导式向导会一步步帮你设置：使用 Google 登录，或连接服务账号，并可直接复用本机已有的 OAuth 客户端与密钥。之后即可浏览该账号的文件。",
+    "detail": "docs/DETAIL.zh.md"
   }
 }
