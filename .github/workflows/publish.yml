@@ -29,5 +29,16 @@ jobs:
             echo "the tag is $tag but package.json says $version"
             exit 1
           fi
+      - name: Is this version already on npm?
+        id: published
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if npm view "dsh-google-drive@$version" version >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "$version is already on npm"
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish
+        if: steps.published.outputs.published != 'true'
         run: npm publish

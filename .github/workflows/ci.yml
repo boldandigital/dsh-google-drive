@@ -18,28 +18,34 @@ jobs:
 
       - name: Syntax check
         run: |
-          for file in lib/index.js lib/client.js lib/host/*.js; do
+          for file in lib/index.js lib/client.js lib/client.onboarding.js lib/client.sidebar.js lib/host/*.js; do
             node --check "$file"
           done
 
+      # The shell quotes are single and the JavaScript inside uses double
+      # quotes, so neither has to be escaped. A `run:` value that spans
+      # several lines must be a block scalar (`|`): written as a plain
+      # scalar it is not valid YAML, and the workflow never runs at all.
       - name: Manifest check
-        run: node -e "
-          const pkg = require('./package.json');
-          if (!pkg.dsh?.bundle?.patch) throw new Error('missing dsh.bundle.patch');
-          if (!pkg.dsh?.client?.platform) throw new Error('missing dsh.client.platform');
-          if (!pkg.exports['./client']) throw new Error('missing ./client export');
-          for (const locale of ['en', 'zh', 'de', 'fr', 'es', 'pt', 'ru', 'ja', 'nl']) {
-            const data = require('./locale/' + locale + '.json');
-            if (!data.meta?.title || !data.meta?.description) {
-              throw new Error('locale/' + locale + '.json is missing meta.title or meta.description');
+        run: |
+          node -e '
+            const pkg = require("./package.json");
+            if (!pkg.dsh?.bundle?.patch) throw new Error("missing dsh.bundle.patch");
+            if (!pkg.dsh?.client?.platform) throw new Error("missing dsh.client.platform");
+            if (!pkg.exports["./client"]) throw new Error("missing ./client export");
+            for (const locale of ["en", "zh", "de", "fr", "es", "pt", "ru", "ja", "nl"]) {
+              const data = require("./locale/" + locale + ".json");
+              if (!data.meta?.title || !data.meta?.description) {
+                throw new Error("locale/" + locale + ".json is missing meta.title or meta.description");
+              }
             }
-          }
-        "
+          '
 
       - name: Icon check
-        run: node -e "
-          const fs = require('node:fs');
-          const svg = fs.readFileSync('assets/icon.svg', 'utf8');
-          if (!svg.includes('<svg')) throw new Error('the icon is not an SVG');
-          if (svg.length > 256 * 1024) throw new Error('the icon exceeds 256 KiB');
-        "
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const svg = fs.readFileSync("assets/icon.svg", "utf8");
+            if (!svg.includes("<svg")) throw new Error("the icon is not an SVG");
+            if (svg.length > 256 * 1024) throw new Error("the icon exceeds 256 KiB");
+          '
