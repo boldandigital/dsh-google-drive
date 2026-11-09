@@ -1,5 +1,7 @@
 # dsh-google-drive
 
+[![Listed on DSH Plugin Hub](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/boldandigital/dsh-google-drive)
+
 Connect Google Drive to the DeepSeek Harness.
 
 The plugin has no entry in the left sidebar. Connected accounts live in
@@ -14,7 +16,11 @@ The account names, the addresses and the file names in these screenshots are
 invented. The real ones belong to whoever installed the plugin, so they stay
 out of the repository.
 
-![Settings → Google Drive: the connected accounts, each with a Test and a Remove button, and a toggle for the Drive tab in the right sidebar](docs/screenshots/settings.png)
+![Settings → Google Drive: the connected accounts, each with an Edit, a Test and a Remove button, and a toggle for the Drive tab in the right sidebar](docs/screenshots/settings.png)
+
+![The Edit account dialog: rename it, change the Workspace user it acts as, replace the key file](docs/screenshots/edit-account.png)
+
+![The onboarding wizard: one primary choice, a step indicator, and the other two ways to connect behind a disclosure](docs/screenshots/wizard.png)
 
 ![The Drive tab in the right sidebar: the files of an account, each with the kind of file it is](docs/screenshots/drive-tab.png)
 
@@ -22,8 +28,8 @@ out of the repository.
 
 | | |
 |---|---|
-| **Settings section** | Settings → Google Drive lists the connected accounts, each with a **Test** button that checks the connection and a **Remove** button behind a confirmation, plus an Add account button, a refresh button and the storage/bridge information. |
-| **Guided onboarding** | Add account opens a wizard: sign in with Google through a Desktop app OAuth client, or connect a service account with a key file. |
+| **Settings section** | Settings → Google Drive lists the connected accounts, each with an **Edit** button (rename it, change the Workspace user it acts as, replace a rotated key, renew a Google sign-in), a **Test** button that checks the connection and a **Remove** button behind a confirmation, plus an Add account button, a refresh button and the storage/bridge information. |
+| **Guided onboarding** | Add account opens a wizard: one primary choice — sign in with Google — with a service account and a Workspace delegation behind a disclosure. It opens the browser for you, explains what Google will say before you meet it, and names the way out of every dead end. |
 | **Optional browser** | A toggle in the settings section turns the Drive tab in the right sidebar on or off. The choice is remembered, and the tab is gone the next time the app starts. |
 | **Right-sidebar tab** | The Drive tab shows an account picker, a folder breadcrumb with a back button, and the folder's files. Each row carries a badge naming the kind: Google Sheet, Google Doc, Google Slides, Google Drawing, Google Form, Google Script, Folder, Shortcut, or the file's own extension (PDF, XLSX, …) for an ordinary file. |
 | **Hand a file to the agent** | Drag a row into the conversation, or press **Add to chat** on it. The file arrives as a reference the agent can act on. |
