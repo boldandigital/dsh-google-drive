@@ -112,26 +112,38 @@ account never deletes a key another account still points at.
 
 ## Which sign-in should I use?
 
-**Use a service account** unless you specifically need a user's own Drive.
+**Most people should sign in with their own Google account.** It is the only
+route that shows the files you can already see in drive.google.com, and it
+needs no administrator.
 
-Google classifies `…/auth/drive` as a *restricted* scope. In production an app
-that requests it must pass Google's verification. A service account sidesteps
-that entirely: it needs no OAuth consent screen, and access is granted by
-sharing a file or folder with the service account's email address.
+| You want… | Use | What it costs |
+|---|---|---|
+| Your own Drive files, and files shared with you | **Sign in with Google** | One visit to the Google Cloud console to create a sign-in key. |
+| One folder, for automation or for a script | **A service account** | A Google Cloud project, and you must share the folder with the account's address. |
+| A company Workspace, as one of its users | **Domain-wide delegation** | A Workspace super administrator has to allow the app; Google can take up to a day to apply it. |
+
+Google classifies `…/auth/drive` as a *restricted* scope, so an app that
+requests it has to pass Google's verification before it can be published to
+everybody. Until it does, Google shows an "app is not verified" warning during
+the sign-in; the answer is *Advanced → Go to …*. A service account sidesteps
+the consent screen entirely: it needs no OAuth approval, and access is granted
+by sharing a file or folder with the service account's email address — but it
+sees **only** what you share with it.
 
 For a service account:
 
 1. In Google Cloud Console, create a service account and download its key.
 2. Share the Drive folder you need with the account's `client_email`.
-3. Paste the key JSON into the wizard. With the gcloud command line tool
+3. Choose the key file in the wizard. With the gcloud command line tool
    installed and signed in, the wizard can create the key for you instead.
 
-**Domain-wide delegation** (the optional "impersonate" field) lets the service
+**Domain-wide delegation** (the optional "act as" field) lets the service
 account act as a Workspace user with that user's full Drive access. A Workspace
 super-admin must first authorise the service account's client id under
-*Admin console → Security → Domain-wide delegation*.
+*Admin console → Security → Domain-wide delegation*, and Google can take up to
+24 hours to apply the change.
 
-**Use OAuth** when you need the files a specific person can see but has not
+**Sign in with Google** is for the files a specific person can see but has not
 shared with anyone. The plugin signs in through a loopback consent URL on
 `http://localhost`, so it needs a **Desktop app** OAuth client — Google
 rejects a localhost callback for a web client. The wizard walks through

@@ -7,24 +7,32 @@ conversation, and drag a file straight into the chat when the agent needs it.
 
 ## Connect an account
 
-Press **Add account** in the settings section. The wizard opens with one
-question — *which of these is your situation?* — and shows only the route
-that fits:
+Press **Add account** in the settings section. The wizard opens with the one
+choice most people want — **my own Google account** — and keeps the other two
+behind a link, so nobody has to know what an OAuth client is before they can
+start:
 
-- **My own Google account** — the plugin looks for an OAuth client this Mac
-  already has, picks it, and opens Google's sign-in. Only a *Desktop app*
-  client works, because Google refuses a `localhost` callback for a web
-  client; the wizard says so in three console steps and then only asks for
-  the downloaded JSON file, which fills the client id and secret in for you.
-- **A service account** — for automation and for files that are shared with
+- **My own Google account** — the plugin looks for a sign-in key this Mac
+  already has, picks it, opens Google's sign-in page for you, and names the
+  account after the address you signed in with. Only a *Desktop app* key
+  works, because Google refuses a `localhost` callback for a web client; the
+  wizard says so in a handful of console steps and then only asks for the
+  downloaded JSON file, which fills the client id and secret in for you.
+- **A service account** — for automation, and for files that are shared with
   a service account. It needs no administrator: share the folder with the
-  account's own address, and the wizard shows you that address as soon as
-  the key is in.
+  account's own address, and the wizard shows you that address as soon as the
+  key is in. It sees **only** what you share with it.
 - **My company uses Google Workspace** — the one route that needs an
   administrator: a service account that acts as a user through domain-wide
-  delegation. The wizard says plainly that a personal Google account cannot
-  delegate, so nobody spends an afternoon in an admin console that has no
-  such setting.
+  delegation. Your administrator allows the app once, and Google can take up
+  to a day to apply it. The wizard gives you a block to send them. A personal
+  Google account cannot delegate at all, and the wizard says so plainly, so
+  nobody spends an afternoon in an admin console that has no such setting.
+
+The wizard tells you what Google will say before you meet it. The first
+sign-in on a new key shows Google's *"app is not verified"* screen, and the
+answer is *Advanced → Go to …*; the wizard says so next to the button rather
+than after the fact.
 
 Either way the sign-in happens on this machine, and the credentials never
 leave it.
@@ -84,14 +92,28 @@ grant authority, so no agent can perform them.
 
 ## Which sign-in should I use?
 
-**A service account, unless the files you need belong to a person who has not
-shared them.** Google classifies `…/auth/drive` as a restricted scope, and an
-app that requests it in production has to pass Google's verification. A
-service account sidesteps that: no consent screen, and access is granted by
-sharing a folder with the account's email address.
+**Most people should sign in with their own Google account.** It is the only
+route that shows you the files you can already see in drive.google.com, and it
+is the only one that needs no administrator at all.
 
-**OAuth** is the one to choose when you need the files a specific person can
-see but has not shared with anyone.
+| You want… | Use | What it costs |
+|---|---|---|
+| Your own Drive files, and files shared with you | **Sign in with Google** | One visit to the Google Cloud console to create a sign-in key. |
+| One folder, for automation or for a script | **A service account** | A Google Cloud project, and you must share the folder with the account's address. |
+| A company Workspace, as one of its users | **Domain-wide delegation** | Your Workspace super administrator has to allow the app, and Google can take up to a day to apply it. |
+
+**A service account sees nothing until you share something with it.** That is
+the trade: it needs no consent screen and no administrator, but it is not "my
+Drive" — it is "the one folder I was given". If the files you need belong to a
+person who has not shared them, sign in with Google instead.
+
+**If you use "Sign in with Google", Google will say the app is not verified.**
+That is expected and it is not a mistake. The plugin asks for
+`…/auth/drive`, which Google classifies as a *restricted* scope: an app that
+requests it has to pass Google's verification before it can be published to
+everybody. Until then Google shows a warning screen, and the answer is
+*Advanced → Go to …*. The wizard says so before you press the button, because
+you will meet that screen on your first attempt.
 
 ## The status of an account means something
 
