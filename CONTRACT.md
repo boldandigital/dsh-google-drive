@@ -273,6 +273,12 @@ Payload `{ name, clientId, clientSecret, scopes? }`.
 Returns `{ flowId, authUrl, expiresAt }`. The host opens no browser; the user
 follows `authUrl`.
 
+Payload `{ name, useStored: true }` instead starts a **re-authorisation**: the
+OAuth client the account was created with is read back from the credential
+store, so an expired or revoked access is renewed with one click and without
+the client id and secret. The account keeps its name and the day it was
+added; only the token is new.
+
 ### `oauth/status`
 
 Payload `{ flowId }`.
@@ -293,6 +299,26 @@ key keeps its newlines when encoded this way). `subject` is the Workspace user
 to impersonate, for domain-wide delegation.
 
 Returns `{ account }`. Failure: `error.code === 'invalid-key'`.
+
+### `accounts/update`
+
+Payload `{ name, newName?, subject?, keyJson? }` → `{ account, renamed, changed }`.
+
+Changes an account that was already added:
+
+- `newName` renames it. The credentials move with it: the new name is written
+  first, so a failure half-way leaves the old account intact.
+- `subject` sets — or with an empty string clears — the Workspace user a
+  service account impersonates. Only a service account has one.
+- `keyJson` replaces the key file of a service account. The account keeps its
+  name and its place in the list.
+
+Everything the host remembers about the account (the cached token, the
+remembered probe, the known root folder) is forgotten, so the next request
+signs in with the new material.
+
+An account the `google-workspace-mcp` server owns cannot be changed here:
+the server owns its credentials.
 
 ### `accounts/test`
 

@@ -7,18 +7,44 @@ conversation, and drag a file straight into the chat when the agent needs it.
 
 ## Connect an account
 
-Press **Add account** in the settings section. The two ways in are tabs, and
-each one ends in a single button:
+Press **Add account** in the settings section. The wizard opens with one
+question — *which of these is your situation?* — and shows only the route
+that fits:
 
-- **Google account** — the plugin looks for an OAuth client this Mac already
-  has, picks it, and opens Google's sign-in. Only a *Desktop app* client
-  works, because Google refuses a `localhost` callback for a web client; the
-  wizard says so and walks through creating one if the machine has none.
-- **Service account** — paste the key file, or let the wizard create one with
-  the `gcloud` command line tool.
+- **My own Google account** — the plugin looks for an OAuth client this Mac
+  already has, picks it, and opens Google's sign-in. Only a *Desktop app*
+  client works, because Google refuses a `localhost` callback for a web
+  client; the wizard says so in three console steps and then only asks for
+  the downloaded JSON file, which fills the client id and secret in for you.
+- **A service account** — for automation and for files that are shared with
+  a service account. It needs no administrator: share the folder with the
+  account's own address, and the wizard shows you that address as soon as
+  the key is in.
+- **My company uses Google Workspace** — the one route that needs an
+  administrator: a service account that acts as a user through domain-wide
+  delegation. The wizard says plainly that a personal Google account cannot
+  delegate, so nobody spends an afternoon in an admin console that has no
+  such setting.
 
 Either way the sign-in happens on this machine, and the credentials never
 leave it.
+
+## Change an account
+
+Every account this plugin owns has an **Edit** button, so an account is not a
+one-way door:
+
+- **Rename** it — the credentials move with it.
+- **Act as a Workspace user** — set, change or take away the user a service
+  account impersonates. Clearing the field is what turns a delegation that
+  cannot work into a plain service account that sees the files shared with
+  it.
+- **Replace the key file** — paste a new key when one is rotated.
+- **Sign in again** — renew a Google sign-in whose access expired. The OAuth
+  client is already stored, so this is one click and no client id to find.
+
+The **Test** button asks Google whether the credentials really work, and the
+section says what came back, in green or in red.
 
 ## Browse the files
 
@@ -39,7 +65,7 @@ rest of that account.
 Typing `@` in the composer opens the reference menu, which lists Drive files
 next to everything else.
 
-![Settings → Google Drive: the connected accounts, each with a Test and a Remove button, and a toggle for the Drive tab in the right sidebar](screenshots/settings.png)
+![Settings → Google Drive: the connected accounts, each with an Edit, a Test and a Remove button, and a toggle for the Drive tab in the right sidebar](screenshots/settings.png)
 
 ![The Drive tab in the right sidebar: the files of an account, each with the kind of file it is](screenshots/drive-tab.png)
 
@@ -72,8 +98,9 @@ see but has not shared with anyone.
 The **Test** button asks Google whether the credentials really work, and the
 section says what came back. An account that cannot sign in — a service
 account whose client id no Workspace administrator authorised, for instance —
-says so in as many words, with the reason Google gave, instead of showing a
-green light that means nothing.
+says so in as many words, with the reason Google gave, and with the two ways
+out that need no administrator: share the folder with the service account, or
+connect the Google account itself.
 
 ## The credentials stay here
 
