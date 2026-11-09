@@ -37,6 +37,8 @@ than after the fact.
 Either way the sign-in happens on this machine, and the credentials never
 leave it.
 
+![The onboarding wizard: one primary choice — my own Google account — a step indicator, and the other two ways to connect behind a disclosure](screenshots/wizard.png)
+
 ## Change an account
 
 Every account this plugin owns has an **Edit** button, so an account is not a
@@ -72,6 +74,8 @@ rest of that account.
 
 Typing `@` in the composer opens the reference menu, which lists Drive files
 next to everything else.
+
+![The Edit account dialog: rename it, change the Workspace user it acts as, replace the key file, and the address to share folders with](screenshots/edit-account.png)
 
 ![Settings → Google Drive: the connected accounts, each with an Edit, a Test and a Remove button, and a toggle for the Drive tab in the right sidebar](screenshots/settings.png)
 

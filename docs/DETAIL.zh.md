@@ -30,6 +30,8 @@ OAuth 客户端是什么才能开始：
 
 两种方式都在本机完成登录，凭证不会离开这台机器。
 
+![接入向导：一个主要选择——我自己的 Google 账号——一个步骤指示，其余两种连接方式收在折叠的链接后面](screenshots/wizard.png)
+
 ## 修改账号
 
 本插件拥有的每个账号都有 **Edit** 按钮，账号不是一次定终身：
@@ -60,6 +62,8 @@ Script、Folder、Shortcut；普通文件则显示它自己的扩展名。
 账号里的其他文件用 `google_drive_search_files`。
 
 在输入框里敲 `@` 会打开引用菜单，Drive 文件和别的引用并列其中。
+
+![编辑账号对话框：改名、更改它代表的 Workspace 用户、替换密钥文件，以及共享文件夹用的地址](screenshots/edit-account.png)
 
 ![设置 → Google Drive：已连接的账号，每个都有 Edit、Test 和 Remove 按钮，还有右侧边栏 Drive 标签页的开关](screenshots/settings.png)
 
