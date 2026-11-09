@@ -331,6 +331,27 @@ signs in with the new material.
 An account the `google-workspace-mcp` server owns cannot be changed here:
 the server owns its credentials.
 
+### `accounts/adopt`
+
+Payload `{ name }` → `{ account }`.
+
+Takes an account the `google-workspace-mcp` server owns into this plugin, so
+it can be edited like any account added here.
+
+The credentials of such an account are the server's, and a key file can be
+shared with another account, so this plugin may not rename it or replace its
+key. What it can do is make a copy: the plugin writes its own private key
+file, with the same `0600` permissions every account added here gets, and
+never touches the file the upstream server may be using.
+
+The shared file keeps the account — the upstream server keeps working with
+it — and its entry now points at the copy. The account is listed once
+afterwards, as an account of this plugin, and `accounts/update` works on it.
+
+Failure: `error.code === 'unknown-account'` when there is no such account,
+and `invalid-key` when the account exists but its credentials cannot be
+read, or when this plugin already owns the name.
+
 ### `accounts/test`
 
 Payload `{ name }` → `{ account: { name, email, type, subject }, files: number }`.

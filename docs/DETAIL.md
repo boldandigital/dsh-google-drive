@@ -56,6 +56,20 @@ one-way door:
 The **Test** button asks Google whether the credentials really work, and the
 section says what came back, in green or in red.
 
+## An account the MCP server owns
+
+An account that the installed `google-workspace-mcp` server added is listed
+too, marked **MCP**. Its credentials are the server's — and a key file can
+be shared with another account — so this plugin does not rename it or
+replace its key. It offers one thing instead: **Make editable**.
+
+That makes this plugin's own copy of the account: a private key file of its
+own, the same one every account added here gets. The server keeps the
+account and keeps working with it — the shared file still holds it, pointing
+at the copy — and the copy here can be renamed, re-keyed and signed in
+again like any other account. The account is listed once afterwards, without
+the MCP mark.
+
 ## Browse the files
 
 The connected account's files live in the **Drive** tab of the right sidebar,
@@ -134,4 +148,5 @@ Secrets never reach the bundle patch, the profile file or a log. Each service
 account gets its own private copy of its key, and removing one account never
 deletes a key another account still points at. An account that belongs to an
 installed `google-workspace-mcp` server is listed but read-only here:
-removing it unlinks it, and the server keeps its own copy.
+removing it unlinks it, and the server keeps its own copy. Taking it into
+this plugin makes a copy of its own and leaves the server's file alone.
