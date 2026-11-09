@@ -58,6 +58,9 @@ https://boldandigital.github.io/dsh-plugin-index/index.json
 The index is rebuilt from the npm registry every morning, so it never points at
 a version the registry does not have.
 
+Every channel this plugin appears in, and the two steps that still need a
+person, are written down in [MARKETPLACES.md](MARKETPLACES.md).
+
 ## Compatibility and trust
 
 | | |
