@@ -166,7 +166,7 @@ account, it does not hand out the credentials behind it.
   ],
   "mcpBridge": {
     "enabled": true,                   // the plugin mirrors accounts into ~/.google-mcp
-    "path": "/Users/lars/.google-mcp", // absolute path, or null when disabled
+    "path": "/Users/you/.google-mcp", // absolute path, or null when disabled
     "installed": true                  // a google-workspace-mcp server was detected
   },
   "storage": "credentials"             // "credentials" | "files"
@@ -203,17 +203,17 @@ installed.
 {
   "gcloud": {
     "available": true,                       // a gcloud binary was found
-    "path": "/Users/lars/google-cloud-sdk/bin/gcloud",
+    "path": "/Users/you/google-cloud-sdk/bin/gcloud",
     "version": "592.0.0",                   // the SDK version, or null
     "authenticated": true,                   // it has an active credential
-    "account": "lars.z@icloud.com",         // the active account, or null
+    "account": "you@example.com",         // the active account, or null
     "projects": [                            // the projects it can reach
       { "id": "charged-garden-280823", "name": "Google Sheet Integration" }
     ]
   },
   "oauthClients": [                          // OAuth clients found on disk
     {
-      "path": "/Users/lars/Downloads/client_secret_123.apps.googleusercontent.com.json",
+      "path": "/Users/you/Downloads/client_secret_123.apps.googleusercontent.com.json",
       "clientId": "123.apps.googleusercontent.com",
       "projectName": "Untitled project",     // may be null
       "type": "web"                          // "web" | "installed"
