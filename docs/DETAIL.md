@@ -1,3 +1,5 @@
+![The Google Drive settings section and the Drive tab in the right sidebar](preview.svg)
+
 # Google Drive accounts
 
 Connect a Google Drive account to the Harness, browse its files beside the

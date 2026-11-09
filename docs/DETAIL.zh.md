@@ -1,3 +1,5 @@
+![Google Drive 设置区域，以及右侧边栏的 Drive 标签页](preview.zh.svg)
+
 # Google Drive 账号
 
 把一个 Google Drive 账号接入 Harness，在对话旁边浏览它的文件，需要的时候把
