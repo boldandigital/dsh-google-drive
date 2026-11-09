@@ -33,7 +33,14 @@ out of the repository.
 
 ## Install
 
-From the Plugin Manager's **Discover** tab, or directly:
+From the Plugin Manager's **Discover** tab, or directly from npm:
+
+```sh
+dsh plugin add dsh-google-drive
+```
+
+The package is also on npm as [`dsh-google-drive`](https://www.npmjs.com/package/dsh-google-drive),
+so `npm install dsh-google-drive` works too. To run it straight from a checkout instead:
 
 ```sh
 dsh plugin --profile desktop add "link:/path/to/dsh-google-drive"
