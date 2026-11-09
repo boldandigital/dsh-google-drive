@@ -41,4 +41,15 @@ jobs:
           fi
       - name: Publish
         if: steps.published.outputs.published != 'true'
-        run: npm publish
+        run: |
+          npm publish || {
+            # The registry can refuse a publish that a local one just made,
+            # or that another publisher made a moment earlier. If the version
+            # is there, the release happened — that is what matters.
+            version="$(node -p "require('./package.json').version")"
+            if npm view "dsh-google-drive@$version" version >/dev/null 2>&1; then
+              echo "$version is on npm; nothing left to do"
+              exit 0
+            fi
+            exit 1
+          }
