@@ -313,6 +313,17 @@ Changes an account that was already added:
 - `keyJson` replaces the key file of a service account. The account keeps its
   name and its place in the list.
 
+The call is **atomic**: everything that can be refused is checked before
+anything is written, so a refused edit — a name that is taken, a key that is
+not a service-account key, a `subject` on an account that has none — leaves
+the key file, the metadata and the credential records exactly as they were.
+
+A name is free only when nothing else holds it: not an account of this plugin,
+not an account the `google-workspace-mcp` server still has, and not the name of
+an account that server had and the user unlinked. Renaming onto such a name is
+refused, because the mirror would otherwise point the upstream server at this
+plugin's own key.
+
 Everything the host remembers about the account (the cached token, the
 remembered probe, the known root folder) is forgotten, so the next request
 signs in with the new material.
