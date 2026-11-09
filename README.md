@@ -46,6 +46,18 @@ so `npm install dsh-google-drive` works too. To run it straight from a checkout 
 dsh plugin --profile desktop add "link:/path/to/dsh-google-drive"
 ```
 
+### From the Discover tab
+
+The plugin is listed in a plugin market index of its own. To see it there, add
+the index source under **Plugins → Discover → Manage index sources**:
+
+```text
+https://boldandigital.github.io/dsh-plugin-index/index.json
+```
+
+The index is rebuilt from the npm registry every morning, so it never points at
+a version the registry does not have.
+
 ## Compatibility and trust
 
 | | |
