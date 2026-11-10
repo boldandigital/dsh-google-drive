@@ -61,5 +61,8 @@
   "engines": {
     "node": ">=22.0.0",
     "dsh": ">=0.2.0"
+  },
+  "scripts": {
+    "test": "node test/run.mjs"
   }
 }

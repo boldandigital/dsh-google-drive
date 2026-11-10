@@ -225,7 +225,10 @@ installed.
       "projectId": "charged-garden-280823",
       "displayName": "GPL Love MCP"
     }
-  ]
+  ],
+  "builtinClient": {                        // the sign-in key the plugin ships
+    "available": true                       // false when the plugin ships none
+  }
 }
 ```
 
@@ -233,6 +236,11 @@ Every field degrades on its own: a missing `gcloud` yields
 `"available": false`, and an unreadable directory yields an empty list. The
 endpoint never fails because a probe failed — a probe that throws is reported
 as "not available", never as an error.
+
+`builtinClient.available` says whether the plugin ships a sign-in key of its
+own. When it does, the browser half offers a one-click sign-in and never asks
+the user to build a client in the Cloud console. The client *secret* is never
+part of this payload: only the host holds it.
 
 The client secret of a discovered OAuth client is never reported here — only
 what a chooser needs. The secret stays on disk.
@@ -272,6 +280,17 @@ Payload `{ name, clientId, clientSecret, scopes? }`.
 
 Returns `{ flowId, authUrl, expiresAt }`. The host opens no browser; the user
 follows `authUrl`.
+
+**The built-in client.** When `clientId` is empty and the plugin ships one
+(the `oauthClientId` option, which the bundle patch sets), the host starts
+the flow with its own client instead of refusing the request. The browser
+never sees the secret: only the host holds it. A `clientId` the caller does
+supply always wins — a user who brings their own client gets theirs.
+
+The plugin only ever signs in through a loopback callback on `127.0.0.1`,
+which is what Google calls a desktop application; Google states that for
+such applications "the client secret is obviously not treated as a secret",
+which is why it may ship with the package.
 
 Payload `{ name, useStored: true }` instead starts a **re-authorisation**: the
 OAuth client the account was created with is read back from the credential
