@@ -102,6 +102,8 @@ The bundle ships with sensible defaults. To change them, override the
 | `defaultAccount` | `''` | Account selected when the Drive tab opens. Empty means the first one. |
 | `mcpBridge` | `true` | Mirror the registry into `~/.google-mcp` for `google-workspace-mcp`. |
 | `storeDir` | `''` | Registry and credential directory. Empty means `~/.google-mcp`. |
+| `oauthClientId` | `''` | The sign-in key the plugin ships. When it is set, a user signs in with one click instead of building a client in the Cloud console. |
+| `oauthClientSecret` | `''` | The secret of that key. The plugin only ever signs in through a loopback callback, which Google calls a desktop application — and for those "the client secret is obviously not treated as a secret". |
 
 ## Where the credentials live
 

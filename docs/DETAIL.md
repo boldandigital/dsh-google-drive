@@ -12,12 +12,20 @@ choice most people want — **my own Google account** — and keeps the other tw
 behind a link, so nobody has to know what an OAuth client is before they can
 start:
 
-- **My own Google account** — the plugin looks for a sign-in key this Mac
-  already has, picks it, opens Google's sign-in page for you, and names the
-  account after the address you signed in with. Only a *Desktop app* key
-  works, because Google refuses a `localhost` callback for a web client; the
-  wizard says so in a handful of console steps and then only asks for the
-  downloaded JSON file, which fills the client id and secret in for you.
+- **My own Google account** — the plugin signs you in with its own key, so
+  there is nothing to set up: one button, Google's sign-in page, done. It
+  names the account after the address you signed in with.
+
+  Google will still show *"Google hasn't verified this app"* the first time.
+  That is expected, and the wizard says so next to the button: the plugin
+  asks for full Drive access, which Google classifies as a restricted scope,
+  and an app that has not been verified says so. Choose *Advanced → Go to …*
+  to continue.
+
+  You can still bring your own key — for a company policy, or to keep the
+  consent screen under your own name — and the wizard walks you through
+  creating one in the Cloud console. Only a *Desktop app* key works there,
+  because Google refuses a `localhost` callback for a web client.
 - **A service account** — for automation, and for files that are shared with
   a service account. It needs no administrator: share the folder with the
   account's own address, and the wizard shows you that address as soon as the

@@ -27,3 +27,9 @@
         # Where the account registry and credential files live.
         # Empty means ~/.google-mcp.
         storeDir: ''
+        # The sign-in key the plugin ships. With one set, a user connects an
+        # account in a single click instead of building an OAuth client in the
+        # Google Cloud console first. Empty means every user brings their
+        # own, and the wizard walks them through it.
+        oauthClientId: ''
+        oauthClientSecret: ''
