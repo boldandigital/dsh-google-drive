@@ -2,6 +2,13 @@ name: publish
 
 # A release is a tag. The workflow publishes the version in package.json to
 # npm with OIDC, so no long-lived token is stored anywhere.
+#
+# npm only accepts an OIDC publish from a workflow it has a trusted publisher
+# for. Configure one at:
+#   https://www.npmjs.com/package/dsh-google-drive/settings
+# with the repository `boldandigital/dsh-google-drive`, the workflow file
+# `publish.yml`, and the `npm publish` allowed action. Without it npm answers
+# `E404 ... you do not have permission to access it`.
 on:
   push:
     tags:
@@ -21,6 +28,8 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+          # npm's own guidance: never use caching in release builds.
+          package-manager-cache: false
       - name: The tag has to match the version
         run: |
           version="$(node -p "require('./package.json').version")"
@@ -29,6 +38,64 @@ jobs:
             echo "the tag is $tag but package.json says $version"
             exit 1
           fi
+      - name: The npm CLI has to understand OIDC
+        # Trusted publishing needs npm CLI 11.5.1 or later. Node 24 ships
+        # npm 11.19, so this only fires if the runner image changes.
+        run: |
+          npm_version="$(npm --version)"
+          echo "npm $npm_version"
+          if [ "$(printf '%s\n11.5.1\n' "$npm_version" | sort -V | head -n1)" != "11.5.1" ]; then
+            echo "npm $npm_version is too old for trusted publishing; 11.5.1 or newer is required"
+            exit 1
+          fi
+      - name: Ask npm for the OIDC token
+        # npm exchanges the GitHub ID token for a short-lived npm token before
+        # it publishes. When that exchange fails, npm quietly falls back to
+        # the placeholder token that setup-node wrote, and the publish fails
+        # with an opaque E404 that names neither the cause nor the fix.
+        #
+        # Asking for the exchange directly turns that into a readable answer:
+        # a matching trusted publisher answers 201 and hands back a token,
+        # and anything else returns the registry's own explanation.
+        run: |
+          set -euo pipefail
+
+          package="$(node -p "require('./package.json').name")"
+
+          # GitHub hands out the ID token on request. The audience npm expects
+          # is npm:registry.npmjs.org.
+          id_token="$(curl -fsS \
+            -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$(node -p "
+              const u = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL)
+              u.searchParams.set('audience', 'npm:registry.npmjs.org')
+              u.toString()
+            ")" \
+            | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).value")"
+
+          status="$(curl -sS -o exchange.json -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer $id_token" \
+            "https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/${package}")"
+
+          echo "the token exchange answered $status"
+
+          # npm answers 201 Created when it mints the token. A token is only
+          # minted when a trusted publisher matches, so any 2xx means the
+          # publish will authenticate.
+          case "$status" in
+            2??) echo "npm accepted the OIDC token" ;;
+            *)
+              echo "npm refused the OIDC exchange, so the publish would fail:"
+              node -p "JSON.stringify(JSON.parse(require('fs').readFileSync('exchange.json', 'utf8')), null, 2)"
+              echo
+              echo "the trusted publisher for this package is what npm matches against."
+              echo "check it at https://www.npmjs.com/package/${package}/settings"
+              echo "and confirm the workflow filename is 'publish.yml' and the allowed"
+              echo "action includes 'npm publish'."
+              exit 1
+              ;;
+          esac
       - name: Is this version already on npm?
         id: published
         run: |
