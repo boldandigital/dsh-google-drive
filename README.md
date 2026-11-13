@@ -71,7 +71,7 @@ person, are written down in [MARKETPLACES.md](MARKETPLACES.md).
 
 | | |
 |---|---|
-| **DSH version** | `>=0.2.0` (`engines.dsh` in `package.json`). Node `>=22`. |
+| **DSH version** | `>=0.2.2-rc.3` (`engines.dsh` in `package.json`). Node `>=22`. |
 | **Platforms** | macOS, Linux and Windows. The OAuth flow signs in through a loopback URL on `http://localhost`, so the browser and the harness run on the same machine. |
 | **Licence** | MIT. |
 | **External service** | The Google Drive API, and Google Cloud Console only when you choose to create a service-account key there yourself. |
